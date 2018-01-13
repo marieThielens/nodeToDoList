@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Ma todolist</title>
+        <style>
+            a {text-decoration: none; color: black;}
+          
+      
+
+        </style>
+    </head>
+
+    <body>
+        <h1>Ma todolist</h1>
+
+
+
+        <ul id="messages">
+        
+        </ul>
+
+        <form action="/todo/ajouter/" method="post" id="todolistForm">
+            <p>
+                <label for="newtodo">Que dois-je faire ?</label>
+                <input type="text" name="newtodo" id="newtodo" autofocus />
+                <input type="submit" />
+            </p>
+        </form>
+
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+ 
+             
+            // Connexion à socket.io
+            var socket = io.connect('http://localhost:3000');
+             
+                 
+                
+                 
+                socket.on('newtodo', function(newtodo) {
+                     $('#messages').empty(); // Refresh the list
+
+                     messages.forEach(function(task, index) {
+                    insererTache(tache, index);
+                });
+                  /*  if (newtodo != '') {
+                        $('#ul').append('<li><a href="/todo/supprimer/">✘</a>'+ newtodo + '</li>');
+                    }
+                                  
+                }); // Transmet le message aux autres*/
+            
+             // A l'envoi du formulaire, la tâche est transmise est affichée sur la page
+            $('#todolistForm').submit(function (){
+                var tache = $('#tache').val();
+                socket.emit('ajoutTache', tache);
+                console.log(tache);
+                insererTache(tache, index); 
+                $('#tache').val('').focus();
+                return false;
+            });
+ 
+            // A l'arrivée du message, insertion dans la page
+            socket.on('ajoutTache', function(data) {
+                insererTache(data.tache, data.index);
+            });
+ 
+            //Fonction insertion tâche
+            function insererTache(tache, index){
+                $('#todolist').append('<li><a class="delete" href="#" data-index="' + index + '">✘</a> ' + tache  + '</li>');
+            }
+ 
+            // Supprimer une tâche
+            $('body').on('click', '.delete', function(){
+                socket.emit('suppTache', $(this).data('index'));
+            });
+ 
+        </script>
+    </body>
+</html>
