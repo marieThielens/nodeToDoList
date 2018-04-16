@@ -2,6 +2,10 @@
 
 ## Une Todolist en temps réel avec node.js
 
+- Une todolist en temps réel : c'est à dire que les différentes personnes qui se connectent voient directement lorsque quelqu'un rajoute ou enlève un évenement. 
+
+<img src="miniature.png" width="50%">
+
 1. Initialisez le fichier .json `npm init`
 
 2. Installez les modules 
